@@ -52,6 +52,17 @@ void PrintVectors(vector<int>* vector, int i) {
     }
 }
 
+void GenerateRandomNumbers(vector<int>* vector, int size) {
+    random_device rd;
+    mt19937 gen(rd());
+    uniform_int_distribution<> distrib(0, 100);
+
+    for (int i = 0; i < size; i++) {
+        vector->push_back(distrib(gen));
+    }
+}
+
+/*
 void GenerateRandomNumbers(vector<int>* vector, int i, int size) {
     if (i < size) {
         random_device rd;
@@ -61,12 +72,13 @@ void GenerateRandomNumbers(vector<int>* vector, int i, int size) {
         GenerateRandomNumbers(vector, i + 1, size);
     }
 }
+*/
 
 int main() {
     cout << "MERGE SORT IMPLEMENTATION" << endl;
     vector<int> a;
     int sizeVector = 10;
-    GenerateRandomNumbers(&a, 0, sizeVector);
+    GenerateRandomNumbers(&a, sizeVector);
     cout << "Vector generated with random numbers:" << endl;
     PrintVectors(&a, 0);
     MergeSort(&a, 0, sizeVector - 1);

@@ -6,7 +6,6 @@
 using namespace std;
 
 int Partitions(vector<int>* v, int begin, int end){
-    
     int pIndex = (begin + end) / 2;
     int pivot = v->at(pIndex);
     swap(v->at(pIndex), v->at(end)); 
@@ -20,11 +19,8 @@ int Partitions(vector<int>* v, int begin, int end){
     }
     i++;
     swap(v->at(i), v->at(end)); 
-    
     return i;
 }
-
-
 
 void QuickSort(vector<int>* v, int begin, int end){
     if(begin < end){
@@ -41,6 +37,17 @@ void PrintVectors(vector<int>* vector, int i) {
     }
 }
 
+void GenerateRandomNumbers(vector<int>* vector, int size) {
+    random_device rd;
+    mt19937 gen(rd());
+    uniform_int_distribution<> distrib(0, 100);
+
+    for (int i = 0; i < size; i++) {
+        vector->push_back(distrib(gen));
+    }
+}
+
+/*
 void GenerateRandomNumbers(vector<int>* vector, int i, int size) {
     if (i < size) {
         random_device rd;
@@ -50,12 +57,12 @@ void GenerateRandomNumbers(vector<int>* vector, int i, int size) {
         GenerateRandomNumbers(vector, i + 1, size);
     }
 }
-
+*/
 int main() {
     cout << "MIDDLE PIVOT QUICK SORT IMPLEMENTATION" << endl;
     vector<int> a;
-    int sizeVector = 10;
-    GenerateRandomNumbers(&a, 0, sizeVector);
+    int sizeVector = 10000;
+    GenerateRandomNumbers(&a, sizeVector);
     cout << "Vector generated with random numbers:" << endl;
     PrintVectors(&a, 0);
     QuickSort(&a,0,sizeVector-1);
