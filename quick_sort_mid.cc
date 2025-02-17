@@ -1,17 +1,20 @@
 #include <iostream>
 #include <vector>
 #include <random>
+#include <chrono>
 #include <algorithm>
 
 using namespace std;
+using namespace std::chrono;
 
-int Partitions(vector<int>* v, int begin, int end){
-    int pIndex = (begin + end) / 2;
-    int pivot = v->at(pIndex);
-    swap(v->at(pIndex), v->at(end)); 
-    int i = begin-1;
+int Partitions(vector<long >* v, long begin, long end){
+    //long long pIndex = (begin + end) / 2; //middle
+    long pivot = v->at(end);
+    //long long pivot = v->at(pIndex); // middle
+    //swap(v->at(pIndex), v->at(end)); // middle
+    long i = begin-1;
     
-    for (int j = begin; j < end; j++) {
+    for (long  j = begin; j < end; j++) {
         if (v->at(j) <= pivot) {
             i++;
             swap(v->at(i), v->at(j));
@@ -22,13 +25,33 @@ int Partitions(vector<int>* v, int begin, int end){
     return i;
 }
 
-void QuickSort(vector<int>* v, int begin, int end){
+void QuickSort(vector<long>* v, long begin, long end){
     if(begin < end){
-       int pIndex = Partitions(v, begin, end);
+       long pIndex = Partitions(v, begin, end);
        QuickSort(v, begin, pIndex-1);
        QuickSort(v, pIndex+1, end);
     }
 }
+
+void PrintVectors(vector<long>* vec) {
+    for (long i = 0; i < vec->size(); i++) {
+        cout << " " << vec->at(i);
+    }
+}
+
+
+void GenerateRandomNumbers(vector<long>* vec, long size) {
+    random_device rd;
+    mt19937 gen(rd());
+    uniform_int_distribution<> distrib(0, 100000);
+
+    for (long i = 0; i < size; i++) {
+        vec->push_back(distrib(gen));
+    }
+}
+
+/*
+Recursive Version:
 
 void PrintVectors(vector<int>* vector, int i) {
     if (i < vector->size()) {
@@ -37,17 +60,6 @@ void PrintVectors(vector<int>* vector, int i) {
     }
 }
 
-void GenerateRandomNumbers(vector<int>* vector, int size) {
-    random_device rd;
-    mt19937 gen(rd());
-    uniform_int_distribution<> distrib(0, 100);
-
-    for (int i = 0; i < size; i++) {
-        vector->push_back(distrib(gen));
-    }
-}
-
-/*
 void GenerateRandomNumbers(vector<int>* vector, int i, int size) {
     if (i < size) {
         random_device rd;
@@ -58,16 +70,49 @@ void GenerateRandomNumbers(vector<int>* vector, int i, int size) {
     }
 }
 */
+
+
 int main() {
-    cout << "MIDDLE PIVOT QUICK SORT IMPLEMENTATION" << endl;
-    vector<int> a;
-    int sizeVector = 10000;
-    GenerateRandomNumbers(&a, sizeVector);
-    cout << "Vector generated with random numbers:" << endl;
-    PrintVectors(&a, 0);
-    QuickSort(&a,0,sizeVector-1);
-    cout << " " << endl << "Vector after being sorted:" << endl;
-    PrintVectors(&a, 0);
+    
+    cout << "QUICK SORT IMPLEMENTATION" << endl;
+    vector<long> a, b;
+    vector<long > t;
+    GenerateRandomNumbers(&a, 10000);
+    b = a;
+    int i = 0;
+    while(i < 10){
+    //cout << "Vector generated with random numbers:" << endl;
+    //PrintVectors(&a);
+    
+    auto start = steady_clock::now();  
+        QuickSort(&a, 0, a.size() - 1);
+        auto end = steady_clock::now();
+
+        auto duration = duration_cast<nanoseconds>(end - start);
+        long long nanoseconds = duration.count();
+
+        if (nanoseconds < 0) {
+            cerr << "Error: negative value. " << i << endl;
+            nanoseconds = 0; 
+        }
+
+        t.push_back(nanoseconds);
+
+    a = b;
+    /*
+    for(int i = 0; i < b.size(); i++){
+        a.pop_back();
+    }
+    for(int i = 0; i < b.size(); i++){
+        a.push_back(b.at(i));
+    }
+        */
+    i++;
+   }
+   for(int i = 0; i < 10; i++){
+    cout << i << ". " << t.at(i)<< endl;
+   }
     cout << " " << endl;
     return 0;
 }
+
