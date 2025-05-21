@@ -163,7 +163,7 @@ int main(){
         cout << "Error uploading file.\n";
         return 0;
     }
-    K_Means kMeans(3, 100);
+    K_Means kMeans(5, 100);
     kMeans.train(dataSet);
     kMeans.printResults(dataSet);
 
